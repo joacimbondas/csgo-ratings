@@ -79,7 +79,28 @@ def getPlayers(team_name):
 #returns a dataframe consisting of all data of the player from players.csv
 def getCarryPlayer(player_name, team):
     return team.loc[team['player_name']==player_name]
-   
+
+def barChart(player_average, player_names, team_name):
+    
+    x = np.arange(len(player_names))  # the label locations
+    width = 0.9  # the width of the bars
+    
+    fig, ax = plt.subplots()
+    barchart = ax.bar(x, player_average, width, label=team_name)
+    
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('Rating')
+    ax.set_title('Player ratings')
+    ax.set_xticks(x)
+    ax.set_xticklabels(player_names)
+    ax.legend()
+    axes = plt.gca()
+    axes.set_ylim([0.8,1.6])
+    
+    fig.tight_layout()
+    
+    plt.show()  
+#data downloaded from https://www.kaggle.com/mateusdmachado/csgo-professional-matches
 #since roster moves are so frequent in csgo I decided to only check data between 2018-2020
 #loading map results
 results = pd.read_csv('archive/results.csv')
@@ -113,13 +134,10 @@ for i in range(len(top_teams)):
         #get a plot for each individual player vs team
         #plot(result, player_name, team_name)
 
-
-
-keke = pd.DataFrame(pa,columns = ['rating'])
-keke['name'] = pn
-plt.figure()
-plt.xticks(keke['rating'], keke['name'])
-plt.show()
+#bar chart comparing all players in a team
+for i in range(len(top_teams)):
+    team_name = top_teams[i]
+    barChart(pa[(5*i):(5*(i+1))],pn[(5*i):(5*(i+1))], team_name)
 
 #plots a rating comparison between all players from the selected teams
 fig, ax = plt.subplots()
